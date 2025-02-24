@@ -65,8 +65,10 @@ class MySQLConnection(BaseConnection):
             and len(CONNECTION_POOL) < self.connection_pool_size
         ):
             CONNECTION_POOL.append(self._connection)
-        self.open = 0
-        self._connection = None
+        else:
+            self.open = 0
+            self._connection.close()
+            self._connection = None
 
     def create_connection(self, autocommit=True):
 
@@ -230,5 +232,4 @@ class MySQLConnection(BaseConnection):
         finally:
             self._cursor.close()
             if self.get_transaction_level() <= 0:
-                self.open = 0
-                self._connection.close()
+                self.close_connection()

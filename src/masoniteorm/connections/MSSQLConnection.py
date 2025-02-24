@@ -167,7 +167,12 @@ class MSSQLConnection(BaseConnection):
             raise QueryException(str(e)) from e
         finally:
             if self.get_transaction_level() <= 0:
-                self._connection.close()
+                self.close_connection()
+
+    def close_connection(self):
+        self.open = 0
+        self._connection.close()
+        self._connection = None
 
     def format_cursor_results(self, cursor_result):
         columnNames = [column[0] for column in self.get_cursor().description]

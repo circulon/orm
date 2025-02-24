@@ -148,9 +148,9 @@ class PostgresConnection(BaseConnection):
         ):
             CONNECTION_POOL.append(self._connection)
         else:
+            self.open = 0
             self._connection.close()
-
-        self._connection = None
+            self._connection = None
 
     def commit(self):
         """Transaction"""
@@ -227,4 +227,3 @@ class PostgresConnection(BaseConnection):
             if self.get_transaction_level() <= 0:
                 self.open = 0
                 self.close_connection()
-                # self._connection.close()
