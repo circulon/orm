@@ -223,6 +223,9 @@ class MySQLConnection(BaseConnection):
                 else:
                     return self.format_cursor_results(cursor.fetchall())
         except Exception as e:
+            if self.get_transaction_level() > 0:
+                self._connection.rollback()
+
             raise QueryException(str(e)) from e
         finally:
             self._cursor.close()

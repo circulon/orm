@@ -161,6 +161,9 @@ class MSSQLConnection(BaseConnection):
 
                 return {}
         except Exception as e:
+            if self.get_transaction_level() > 0:
+                self._connection.rollback()
+
             raise QueryException(str(e)) from e
         finally:
             if self.get_transaction_level() <= 0:
