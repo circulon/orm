@@ -2,6 +2,7 @@ import inspect
 import os
 import unittest
 
+from src.masoniteorm.exceptions import QueryException
 from tests.integrations.config.database import DATABASES
 from src.masoniteorm.connections import ConnectionFactory
 from src.masoniteorm.models import Model
@@ -38,3 +39,10 @@ if os.getenv("RUN_POSTGRES_DATABASE") == "True":
             builder.rollback()
             user = builder.where("name", "phillip2").first()
             self.assertEqual(user, None)
+
+        def test_exception_during_transaction(self):
+            builder = self.get_builder()
+            with self.assertRaises(QueryException):
+                builder.begin()
+                builder.create({"name": "phillip2"})
+                builder.commit()
