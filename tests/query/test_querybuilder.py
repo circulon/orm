@@ -1,6 +1,7 @@
 import unittest
 
 from src.masoniteorm.query import QueryBuilder
+
 from tests.integrations.config.database import DATABASES
 from tests.utils import MockSQLiteConnection
 

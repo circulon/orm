@@ -4,6 +4,7 @@ from src.masoniteorm.connections import ConnectionFactory
 from src.masoniteorm.migrations import Migration
 from src.masoniteorm.schema import Schema
 from src.masoniteorm.schema.platforms import SQLitePlatform
+
 from tests.integrations.config.database import DB
 
 
