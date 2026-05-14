@@ -7,6 +7,7 @@ init: .env .bootstrapped-dev
 init-ci: .env .bootstrapped-tests
 
 .bootstrapped-tests:
+	pip install --upgrade pip
 	pip install -r requirements.txt
 	touch .bootstrapped-tests
 
@@ -38,7 +39,7 @@ lint: .bootstrapped-tests
 
 .PHONY: format
 format: .bootstrapped-tests
-	ruff format --check src/masoniteorm tests/
+	ruff format --check src/masoniteorm tests
 
 .PHONY: coverage
 coverage:
