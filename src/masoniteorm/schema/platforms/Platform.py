@@ -34,9 +34,7 @@ class Platform:
                     constraint_name=foreign_key.constraint_name,
                     table=self.wrap_table(table),
                     foreign_table=self.wrap_table(foreign_key.foreign_table),
-                    foreign_column=self.wrap_column(
-                        foreign_key.foreign_column
-                    ),
+                    foreign_column=self.wrap_column(foreign_key.foreign_column),
                     cascade=cascade,
                 )
             )
@@ -46,9 +44,9 @@ class Platform:
         sql = []
         for name, constraint in constraints.items():
             sql.append(
-                getattr(
-                    self, f"get_{constraint.constraint_type}_constraint_string"
-                )().format(columns=", ".join(constraint.columns))
+                getattr(self, f"get_{constraint.constraint_type}_constraint_string")().format(
+                    columns=", ".join(constraint.columns)
+                )
             )
         return sql
 

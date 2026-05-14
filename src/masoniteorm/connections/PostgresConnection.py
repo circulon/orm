@@ -65,9 +65,7 @@ class PostgresConnection(BaseConnection):
 
         self.prefix = prefix
         self.full_details = full_details or {}
-        self.connection_pool_size = full_details.get(
-            "connection_pooling_max_size", 100
-        )
+        self.connection_pool_size = full_details.get("connection_pooling_max_size", 100)
         self.options = options or {}
         self._cursor = None
         self.transaction_level = 0
@@ -111,9 +109,7 @@ class PostgresConnection(BaseConnection):
             guc_params["search_path"] = schema
 
         if guc_params:
-            kwargs["options"] = " ".join(
-                f"-c {k}={v}" for k, v in guc_params.items()
-            )
+            kwargs["options"] = " ".join(f"-c {k}={v}" for k, v in guc_params.items())
 
         return kwargs
 
@@ -154,10 +150,7 @@ class PostgresConnection(BaseConnection):
             for _ in range(initialize_size - len(CONNECTION_POOL)):
                 CONNECTION_POOL.append(psycopg2.connect(**connect_kwargs))
 
-        if (
-            self.full_details.get("connection_pooling_enabled")
-            and len(CONNECTION_POOL) > 0
-        ):
+        if self.full_details.get("connection_pooling_enabled") and len(CONNECTION_POOL) > 0:
             connection = CONNECTION_POOL.pop()
         else:
             connection = psycopg2.connect(**connect_kwargs)
