@@ -1,7 +1,7 @@
+from functools import reduce
 import json
 import operator
 import random
-from functools import reduce
 
 
 class Collection:
@@ -31,7 +31,7 @@ class Collection:
         If a callback is given then the first result will be the result after the filter.
 
         Keyword Arguments:
-            callback {callable} -- Used to filter the results before returning the first item. (default: {None})
+            callback {callable} - Used to filter the results before returning the first item. default: {None}
 
         Returns:
             mixed -- Returns whatever the first item is.
@@ -54,7 +54,7 @@ class Collection:
         If a callback is given then the last result will be the result after the filter.
 
         Keyword Arguments:
-            callback {callable} -- Used to filter the results before returning the last item. (default: {None})
+            callback {callable} - Used to filter the results before returning the last item. default: {None}
 
         Returns:
             mixed -- Returns whatever the last item is.
@@ -78,7 +78,7 @@ class Collection:
         If a key is given it will return the average of all the values of the key.
 
         Keyword Arguments:
-            key {string} -- The key to use to find the average of all the values of that key. (default: {None})
+            key {string} - The key to use to find the average of all the values of that key. default: {None}
 
         Returns:
             int -- Returns the average.
@@ -188,12 +188,10 @@ class Collection:
         def _flatten(items):
             if isinstance(items, dict):
                 for v in items.values():
-                    for x in _flatten(v):
-                        yield x
+                    yield from _flatten(v)
             elif isinstance(items, list):
                 for i in items:
-                    for j in _flatten(i):
-                        yield j
+                    yield from _flatten(i)
             else:
                 yield items
 
@@ -276,9 +274,7 @@ class Collection:
 
                 if k == value:
                     if key:
-                        attributes[self._data_get(item, key)] = self._data_get(
-                            item, value
-                        )
+                        attributes[self._data_get(item, key)] = self._data_get(item, value)
                     else:
                         attributes.append(v)
 
@@ -310,9 +306,7 @@ class Collection:
         if collection_count == 0:
             return None
         elif count and count > collection_count:
-            raise ValueError(
-                "count argument must be inferior to collection length."
-            )
+            raise ValueError("count argument must be inferior to collection length.")
         elif count:
             self._items = random.sample(self._items, k=count)
             return self
@@ -426,9 +420,7 @@ class Collection:
             if isinstance(item, dict):
                 comparison = item.get(key)
             else:
-                comparison = (
-                    getattr(item, key) if hasattr(item, key) else False
-                )
+                comparison = getattr(item, key) if hasattr(item, key) else False
             if self._make_comparison(comparison, value, op):
                 attributes.append(item)
         return self.__class__(attributes)
@@ -482,9 +474,7 @@ class Collection:
     def zip(self, items):
         items = self.__get_items(items)
         if not isinstance(items, list):
-            raise ValueError(
-                "The 'items' parameter must be a list or a Collection"
-            )
+            raise ValueError("The 'items' parameter must be a list or a Collection")
 
         _items = []
         for x, y in zip(self, items):
@@ -550,8 +540,7 @@ class Collection:
         return operators[op](str(a), str(b))
 
     def __iter__(self):
-        for item in self._items:
-            yield item
+        yield from self._items
 
     def __eq__(self, other):
         other = self.__get_items(other)

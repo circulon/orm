@@ -1,14 +1,12 @@
+from datetime import date as datetimedate, datetime, time as datetimetime
+from decimal import Decimal
 import inspect
 import json
 import logging
-from datetime import date as datetimedate
-from datetime import datetime
-from datetime import time as datetimetime
-from decimal import Decimal
-from typing import Any, Dict
+from typing import Any
 
-import pendulum
 from inflection import tableize, underscore
+import pendulum
 
 from ..collection import Collection
 from ..config import load_config
@@ -17,18 +15,23 @@ from ..observers import ObservesEvents
 from ..query import QueryBuilder
 from ..scopes import TimeStampsMixin
 
-"""This is a magic class that will help using models like User.first() instead of having to instatiate a class like
-User().first()
+"""
+This is a magic class that will help using models like User.first()
+instead of having to instantiate a class like User().first()
 """
 
 
 class ModelMeta(type):
     def __getattr__(self, attribute, *args, **kwargs):
-        """This method is called between a Model and accessing a property. This is a quick and easy
-        way to instantiate a class before the first method is called. This is to avoid needing
+        """This method is called between a Model and accessing a property.
+
+        This is a quick and easy
+        way to instantiate a class before the first method is called.
+
+        This is to avoid needing
         to do this:
 
-        User().where(..)
+        User().where(...)
 
         and instead, with this class inherited as a meta class, we can do this:
 
@@ -159,7 +162,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
     Base Classes:
         TimeStampsMixin (TimeStampsMixin): Adds scopes to add timestamps when something is inserted
         metaclass (ModelMeta, optional): Helps instantiate a class when it hasn't been instantiated. Defaults to ModelMeta.
-    """
+    """  # noqa: E501
 
     __fillable__ = ["*"]
     __guarded__ = []
@@ -191,110 +194,110 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
     builder: QueryBuilder
 
-    """Pass through will pass any method calls to the model directly through to the query builder.
-    Anytime one of these methods are called on the model it will actually be called on the query builder class.
     """
-    __passthrough__ = set(
-        (
-            "add_select",
-            "aggregate",
-            "all",
-            "avg",
-            "between",
-            "bulk_create",
-            "chunk",
-            "count",
-            "decrement",
-            "delete",
-            "distinct",
-            "doesnt_exist",
-            "doesnt_have",
-            "exists",
-            "find_or",
-            "find_or_404",
-            "first_or_fail",
-            "first",
-            "first_where",
-            "first_or_create",
-            "force_update",
-            "from_",
-            "from_raw",
-            "get",
-            "get_table_schema",
-            "group_by_raw",
-            "group_by",
-            "has",
-            "having",
-            "having_raw",
-            "increment",
-            "in_random_order",
-            "join_on",
-            "join",
-            "joins",
-            "last",
-            "left_join",
-            "limit",
-            "lock_for_update",
-            "make_lock",
-            "max",
-            "min",
-            "new_from_builder",
-            "new",
-            "not_between",
-            "offset",
-            "on",
-            "or_where",
-            "or_where_null",
-            "order_by_raw",
-            "order_by",
-            "paginate",
-            "right_join",
-            "select_raw",
-            "select",
-            "set_global_scope",
-            "set_schema",
-            "shared_lock",
-            "simple_paginate",
-            "skip",
-            "statement",
-            "sum",
-            "table_raw",
-            "take",
-            "to_qmark",
-            "to_sql",
-            "truncate",
-            "update",
-            "when",
-            "where_between",
-            "where_column",
-            "where_date",
-            "or_where_doesnt_have",
-            "or_has",
-            "or_where_has",
-            "or_doesnt_have",
-            "or_where_not_exists",
-            "or_where_date",
-            "where_exists",
-            "where_from_builder",
-            "where_has",
-            "where_in",
-            "where_like",
-            "where_not_between",
-            "where_not_in",
-            "where_not_like",
-            "where_not_null",
-            "where_null",
-            "where_raw",
-            "without_global_scopes",
-            "where",
-            "where_doesnt_have",
-            "with_",
-            "with_count",
-            "latest",
-            "oldest",
-            "value",
-        )
-    )
+    Pass through will pass any method calls to the model directly through to the query builder.
+    Anytime one of these methods are called on the model it will actually be called on
+    the query builder class
+    """
+    __passthrough__ = {
+        "add_select",
+        "aggregate",
+        "all",
+        "avg",
+        "between",
+        "bulk_create",
+        "chunk",
+        "count",
+        "decrement",
+        "delete",
+        "distinct",
+        "doesnt_exist",
+        "doesnt_have",
+        "exists",
+        "find_or",
+        "find_or_404",
+        "first",
+        "first_or_create",
+        "first_or_fail",
+        "first_where",
+        "force_update",
+        "from_",
+        "from_raw",
+        "get",
+        "get_table_schema",
+        "group_by",
+        "group_by_raw",
+        "has",
+        "having",
+        "having_raw",
+        "in_random_order",
+        "increment",
+        "join",
+        "join_on",
+        "joins",
+        "last",
+        "latest",
+        "left_join",
+        "limit",
+        "lock_for_update",
+        "make_lock",
+        "max",
+        "min",
+        "new",
+        "new_from_builder",
+        "not_between",
+        "offset",
+        "oldest",
+        "on",
+        "or_doesnt_have",
+        "or_has",
+        "or_where",
+        "or_where_date",
+        "or_where_doesnt_have",
+        "or_where_has",
+        "or_where_not_exists",
+        "or_where_null",
+        "order_by",
+        "order_by_raw",
+        "paginate",
+        "right_join",
+        "select",
+        "select_raw",
+        "set_global_scope",
+        "set_schema",
+        "shared_lock",
+        "simple_paginate",
+        "skip",
+        "statement",
+        "sum",
+        "table_raw",
+        "take",
+        "to_qmark",
+        "to_sql",
+        "truncate",
+        "update",
+        "value",
+        "when",
+        "where",
+        "where_between",
+        "where_column",
+        "where_date",
+        "where_doesnt_have",
+        "where_exists",
+        "where_from_builder",
+        "where_has",
+        "where_in",
+        "where_like",
+        "where_not_between",
+        "where_not_in",
+        "where_not_like",
+        "where_not_null",
+        "where_null",
+        "where_raw",
+        "with_",
+        "with_count",
+        "without_global_scopes",
+    }
 
     __cast_map__ = {}
 
@@ -350,7 +353,8 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         except AttributeError:
             name = self.__class__.__name__
             raise AttributeError(
-                f"class '{name}' has no attribute {self.get_primary_key()}. Did you set the primary key correctly on the model using the __primary_key__ attribute?"
+                f"class '{name}' has no attribute {self.get_primary_key()}. "
+                f"Did you set the primary key correctly on the model using the __primary_key__ attribute?"
             )
 
     def get_foreign_key(self):
@@ -362,9 +366,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         Returns:
             str
         """
-        return underscore(
-            self.__class__.__name__ + "_" + self.get_primary_key()
-        )
+        return underscore(self.__class__.__name__ + "_" + self.get_primary_key())
 
     def query(self):
         return self.get_builder()
@@ -410,7 +412,8 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
                     and "__guarded__" in base_class.__dict__
                 ):
                     raise AttributeError(
-                        f"{type(self).__name__} must specify either __fillable__ or __guarded__ properties, but not both."
+                        f"{type(self).__name__} must specify either __fillable__ or __guarded__ properties, "
+                        "but not both."
                     )
 
             self._booted = True
@@ -586,9 +589,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
             self: A hydrated version of a model
         """
         if query:
-            return cls.builder.create(
-                dictionary, query=True, cast=cast, **kwargs
-            )
+            return cls.builder.create(dictionary, query=True, cast=cast, **kwargs)
 
         return cls.builder.create(dictionary, cast=cast, **kwargs)
 
@@ -611,7 +612,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
         return value
 
-    def cast_values(self, attributes: Dict[str, Any]) -> Dict[str, Any]:
+    def cast_values(self, attributes: dict[str, Any]) -> dict[str, Any]:
         """
         Runs provided dictionary through all model casters and returns the result.
 
@@ -620,9 +621,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         updated_attribs = {}
         for key, value in attributes.items():
             if key in self.get_dates():
-                updated_attribs.update(
-                    {key: self.get_new_datetime_string(value)}
-                )
+                updated_attribs.update({key: self.get_new_datetime_string(value)})
             elif key in self.__casts__:
                 updated_attribs.update({key: self.cast_value(key, value)})
             else:
@@ -631,11 +630,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         return updated_attribs
 
     def fresh(self):
-        return (
-            self.get_builder()
-            .where(self.get_primary_key(), self.get_primary_key_value())
-            .first()
-        )
+        return self.get_builder().where(self.get_primary_key(), self.get_primary_key_value()).first()
 
     def serialize(self, exclude=None, include=None):
         """Takes the data as a model and converts it into a dictionary.
@@ -647,9 +642,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
         # prevent using both exclude and include at the same time
         if exclude is not None and include is not None:
-            raise AttributeError(
-                "Can not define both includes and exclude values."
-            )
+            raise AttributeError("Can not define both includes and exclude values.")
 
         if exclude is not None:
             self.__hidden__ = exclude
@@ -665,9 +658,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
         if self.__visible__:
             new_serialized_dictionary = {
-                k: serialized_dictionary[k]
-                for k in self.__visible__
-                if k in serialized_dictionary
+                k: serialized_dictionary[k] for k in self.__visible__ if k in serialized_dictionary
             }
             serialized_dictionary = new_serialized_dictionary
         else:
@@ -676,14 +667,9 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
                     serialized_dictionary.pop(key)
 
         for date_column in self.get_dates():
-            if (
-                date_column in serialized_dictionary
-                and serialized_dictionary[date_column]
-            ):
-                serialized_dictionary[date_column] = (
-                    self.get_new_serialized_date(
-                        serialized_dictionary[date_column]
-                    )
+            if date_column in serialized_dictionary and serialized_dictionary[date_column]:
+                serialized_dictionary[date_column] = self.get_new_serialized_date(
+                    serialized_dictionary[date_column]
                 )
 
         serialized_dictionary.update(self.__dirty_attributes__)
@@ -703,9 +689,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
             if key in self.__hidden__:
                 remove_keys.append(key)
             if hasattr(value, "serialize"):
-                value = value.serialize(
-                    self.__relationship_hidden__.get(key, [])
-                )
+                value = value.serialize(self.__relationship_hidden__.get(key, []))
             if isinstance(value, datetime):
                 value = self.get_new_serialized_date(value)
             if key in self.__casts__:
@@ -795,7 +779,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         """Sets the updated at date to the current time or a specified date
 
         Args:
-            date (datetime.datetime, optional): a date. If none is specified then it will use the current date Defaults to None.
+            date (datetime.datetime, optional): a date. If none is specified then it will use the current date
         """
         self.updated_at = date or self._current_timestamp()
 
@@ -817,22 +801,12 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         if (new_name_accessor) in self.__class__.__dict__:
             return self.__class__.__dict__.get(new_name_accessor)(self)
 
-        if (
-            "__dirty_attributes__" in self.__dict__
-            and attribute in self.__dict__["__dirty_attributes__"]
-        ):
+        if "__dirty_attributes__" in self.__dict__ and attribute in self.__dict__["__dirty_attributes__"]:
             return self.get_dirty_value(attribute)
 
-        if (
-            "__attributes__" in self.__dict__
-            and attribute in self.__dict__["__attributes__"]
-        ):
+        if "__attributes__" in self.__dict__ and attribute in self.__dict__["__attributes__"]:
             if attribute in self.get_dates():
-                return (
-                    self.get_new_date(self.get_value(attribute))
-                    if self.get_value(attribute)
-                    else None
-                )
+                return self.get_new_date(self.get_value(attribute)) if self.get_value(attribute) else None
             return self.get_value(attribute)
 
         if attribute in self.__passthrough__:
@@ -848,9 +822,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         if attribute not in self.__dict__:
             name = self.__class__.__name__
 
-            raise AttributeError(
-                f"class model '{name}' has no attribute {attribute}"
-            )
+            raise AttributeError(f"class model '{name}' has no attribute {attribute}")
 
         return None
 
@@ -884,16 +856,16 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
         try:
             if not attribute.startswith("_"):
-                self.__dict__["__dirty_attributes__"].update(
-                    {attribute: value}
-                )
+                self.__dict__["__dirty_attributes__"].update({attribute: value})
             else:
                 self.__dict__[attribute] = value
         except KeyError:
             pass
 
     def get_raw_attribute(self, attribute):
-        """Gets an attribute without having to call the models magic methods. Gets around infinite recursion loops.
+        """
+        Gets an attribute without having to call the models magic methods.
+        Gets around infinite recursion loops.
 
         Args:
             attribute (string): The attribute to fetch
@@ -925,9 +897,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
 
         if not query:
             if self.is_loaded():
-                result = builder.update(
-                    self.__dirty_attributes__, ignore_mass_assignment=True
-                )
+                result = builder.update(self.__dirty_attributes__, ignore_mass_assignment=True)
             else:
                 result = self.create(
                     self.__dirty_attributes__,
@@ -1084,7 +1054,8 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
     def save_many(self, relation, relating_records):
         if isinstance(relating_records, Model):
             raise ValueError(
-                "Saving many records requires an iterable like a collection or a list of models and not a Model object. To attach a model, use the 'attach' method."
+                "Saving many records requires an iterable like a collection or a list of models "
+                "and not a Model object. To attach a model, use the 'attach' method."
             )
 
         for related_record in relating_records:
@@ -1093,7 +1064,8 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
     def detach_many(self, relation, relating_records):
         if isinstance(relating_records, Model):
             raise ValueError(
-                "Detaching many records requires an iterable like a collection or a list of models and not a Model object. To detach a model, use the 'detach' method."
+                "Detaching many records requires an iterable like a collection or a list of models "
+                "and not a Model object. To detach a model, use the 'detach' method."
             )
 
         related = getattr(self.__class__, relation)
@@ -1121,17 +1093,16 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         related = getattr(self.__class__, relation)
 
         if not related_record.is_created():
-            related_record = related_record.create(
-                related_record.all_attributes()
-            )
+            related_record = related_record.create(related_record.all_attributes())
         else:
             related_record.save()
 
         return related.detach(self, related_record)
 
     def save_quietly(self):
-        """This method calls the save method on a model without firing the saved & saving observer events. Saved/Saving
-        are toggled back on once save_quietly has been ran.
+        """
+        This method calls the save method on a model without firing the saved & saving observer events.
+        Saved/Saving are toggled back on once save_quietly has been ran.
 
         Instead of calling:
 
@@ -1147,7 +1118,8 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         return saved
 
     def delete_quietly(self):
-        """This method calls the delete method on a model without firing the delete & deleting observer events.
+        """
+        This method calls the delete method on a model without firing the delete & deleting observer events
         Instead of calling:
 
         User().delete(...)
@@ -1159,11 +1131,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         Returns:
             self
         """
-        delete = (
-            self.without_events()
-            .where(self.get_primary_key(), self.get_primary_key_value())
-            .delete()
-        )
+        delete = self.without_events().where(self.get_primary_key(), self.get_primary_key_value()).delete()
         self.with_events()
         return delete
 
@@ -1171,22 +1139,18 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         return self.attach(relation, related_record)
 
     @classmethod
-    def filter_fillable(cls, dictionary: Dict[str, Any]) -> Dict[str, Any]:
+    def filter_fillable(cls, dictionary: dict[str, Any]) -> dict[str, Any]:
         """
         Filters provided dictionary to only include fields specified in the model's __fillable__ property
 
         Passed dictionary is not mutated.
         """
         if cls.__fillable__ != ["*"]:
-            dictionary = {
-                x: dictionary[x] for x in cls.__fillable__ if x in dictionary
-            }
+            dictionary = {x: dictionary[x] for x in cls.__fillable__ if x in dictionary}
         return dictionary
 
     @classmethod
-    def filter_mass_assignment(
-        cls, dictionary: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def filter_mass_assignment(cls, dictionary: dict[str, Any]) -> dict[str, Any]:
         """
         Filters the provided dictionary in preparation for a mass-assignment operation
 
@@ -1195,7 +1159,7 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         return cls.filter_guarded(cls.filter_fillable(dictionary))
 
     @classmethod
-    def filter_guarded(cls, dictionary: Dict[str, Any]) -> Dict[str, Any]:
+    def filter_guarded(cls, dictionary: dict[str, Any]) -> dict[str, Any]:
         """
         Filters provided dictionary to exclude fields specified in the model's __guarded__ property
 
@@ -1204,6 +1168,4 @@ class Model(TimeStampsMixin, ObservesEvents, metaclass=ModelMeta):
         if cls.__guarded__ == ["*"]:
             # If all fields are guarded, all data should be filtered
             return {}
-        return {
-            f: dictionary[f] for f in dictionary if f not in cls.__guarded__
-        }
+        return {f: dictionary[f] for f in dictionary if f not in cls.__guarded__}
