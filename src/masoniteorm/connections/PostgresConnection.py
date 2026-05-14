@@ -35,6 +35,7 @@ _PSYCOPG2_CONNECT_KWARGS = frozenset(
         "fallback_application_name",
         # Misc
         "cursor_factory",
+        "async_",
         "async",
     }
 )
