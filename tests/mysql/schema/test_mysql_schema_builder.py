@@ -112,19 +112,31 @@ class TestMySQLSchemaBuilder(unittest.TestCase):
             blueprint.foreign_id("post_id").references("id").on("posts")
             blueprint.foreign_id_for(Discussion).references("id").on("discussions")
 
-        self.assertEqual(len(blueprint.table.added_columns), 3)
+        self.assertEqual(len(blueprint.table.added_columns), 5)
+        print(blueprint.to_sql())
         self.assertEqual(
             blueprint.to_sql(),
             [
                 "CREATE TABLE `users` (`name` VARCHAR(255) NOT NULL, "
                 "`age` INT(11) NOT NULL, "
                 "`profile_id` INT(11) NOT NULL, "
-                "`post_id` BIGINT UNSIGNED NOT NULL, "
+                "`post_id` BIGINT(32) UNSIGNED NOT NULL, "
+                "`discussion_id` BIGINT(32) UNSIGNED NOT NULL, "
                 "CONSTRAINT users_name_unique UNIQUE (name), "
                 "CONSTRAINT users_profile_id_foreign FOREIGN KEY (`profile_id`) REFERENCES `profiles`(`id`), "
-                "CONSTRAINT users_profile_id_foreign FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`)), "
-                "CONSTRAINT users_discussions_id_foreign FOREIGN KEY (`discussion_id`) REFERENCES `posts`(`id`))"
+                "CONSTRAINT users_post_id_foreign FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`), "
+                "CONSTRAINT users_discussion_id_foreign FOREIGN KEY (`discussion_id`) REFERENCES `discussions`(`id`))"
             ],
+            # [
+            #     "CREATE TABLE `users` (`name` VARCHAR(255) NOT NULL, "
+            #     "`age` INT(11) NOT NULL, "
+            #     "`profile_id` INT(11) NOT NULL, "
+            #     "`post_id` BIGINT UNSIGNED NOT NULL, "
+            #     "CONSTRAINT users_name_unique UNIQUE (name), "
+            #     "CONSTRAINT users_profile_id_foreign FOREIGN KEY (`profile_id`) REFERENCES `profiles`(`id`), "
+            #     # "CONSTRAINT users_profile_id_foreign FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`)), "
+            #     "CONSTRAINT users_discussion_id_foreign FOREIGN KEY (`discussion_id`) REFERENCES `posts`(`id`))"
+            # ],
         )
 
     def test_can_add_columns_with_dotted_foreign_key_constaint(self):
